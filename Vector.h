@@ -5,14 +5,25 @@
 
 #pragma once
 #include "stdlib.h"
+#include "stdio.h"
 #include "stdbool.h"
+#define SMALL_TO_BIG 1
+#define BIG_TO_SMALL -1
+
 typedef struct Vector_{
     void** pArray;
     size_t size;
     size_t capacity;
 }Vector;
-
-
+/**
+ * @brief 初始化矢量
+ */
+extern Vector* VectorInit();
+/**
+ * @brief 释放矢量
+ * @param vector 矢量指针
+ */
+extern void VectorFree(Vector* vector);
 /**
  * @brief 矢量追加一个元素
  * @param vector 矢量指针
@@ -44,25 +55,29 @@ extern void VectorInsertVector(Vector * vector, size_t index, Vector* pVector);
  * @param vector 矢量指针
  * @param begin 起始索引
  * @param end 结束索引
- * @param compareCallback 比较回调函数，若参数0大于参数1则返回true，原型: bool(*)(void*, void*)
- * @param sortCallback 排序回调函数，原型: void(*)(Vector*, size_t,size_t,bool(*)(void*, void*))
+ * @param order 从大到小排序或从小到大排序，宏：BIG_TO_SMALL, SMALL_TO_BIG
+ * @param compareCallback 比较回调函数，若参数0 > 参数1则返回1，否则返回-1，原型: int(*)(void*, void*)
+ * @param sortCallback 排序回调函数，原型: void(*)(void*, size_t,size_t,int(*)(void*, void*))
  */
 extern void VectorSort(
         Vector * vector,
         size_t begin,
         size_t end,
-        bool (*compareCallback)(void* pA, void* pB),
+        int order,
+        int (*compareCallback)(void* pA, void* pB),
         void(*sortCallback)(
-                Vector * vector,
+                void** pArray,
                 size_t begin,
                 size_t end,
-                bool (*compareCallback)(void* pA, void* pB))
+                int order,
+                int (*compareCallback)(void* pA, void* pB))
         );
 /**
  * @brief 测试输出
  * @param vector 矢量指针
+ * @param printCallback 输出元素数据回调函数，原型: void(*)(void*)
  */
-extern void VectorDebugPrint(Vector * vector);
+extern void VectorDebugPrint(Vector * vector, void(*printCallback)(void* p));
 /**
  * @brief 交换两个矢量的数据
  * @param vectorA 矢量A
