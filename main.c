@@ -1,18 +1,27 @@
 #include <stdio.h>
 #include "Vector.h"
 #include "SortAlgorithm.h"
+#include <time.h>
 
 extern void printInt(void* I);
 extern int compareInt(void* a, void* b);
 
 int main() {
+    clock_t start, end;
     Vector * vector = VectorInit();
-    for(size_t i = 500; i>=1; i--){
-        VectorPushBack(vector, (void*)i);
+    Vector * test;
+    for(int i = 50000; i<=50000;i+=2000){
+        test = VectorInit();
+        for(size_t j = 1; j<=i;j++){
+            VectorPushBack(test, (void*)j);
+        }
+        start = clock();
+        VectorSort(test,0,i-1,BIG_TO_SMALL,compareInt,BubbleSort);
+        end = clock();
+        //VectorDebugPrint(test, printInt);
+        VectorFree(test);
+        printf_s("Sorted %d elements, spent %ld\n",i, end-start);
     }
-    VectorSort(vector, 0, 500, SMALL_TO_BIG, compareInt, BubbleSort);
-    VectorDebugPrint(vector, printInt);
-    VectorFree(vector);
     return 0;
 }
 

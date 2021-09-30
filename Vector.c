@@ -46,13 +46,9 @@ void VectorSort(
         size_t end,
         int order,
         int (*compareCallback)(void* pA, void* pB),
-        void(*sortCallback)(
-                void** pArray,
-                size_t begin,
-                size_t end,
-                int order,
-                int (*compareCallback)(void* pA, void* pB))
-                ){
+        void(*sortCallback)(void**,size_t,size_t,int,int (*)(void* pA, void* pB))){
+    ASSERT(vector);//空检测
+    //传递参数
     sortCallback(vector->pArray,begin,end, order,compareCallback);
 }
 
