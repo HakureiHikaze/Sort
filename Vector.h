@@ -7,8 +7,9 @@
 #include "stdlib.h"
 #include "stdbool.h"
 typedef struct Vector_{
-    void* p;
+    void** pArray;
     size_t size;
+    size_t capacity;
 }Vector;
 
 
@@ -18,6 +19,11 @@ typedef struct Vector_{
  * @param pData 数据指针
  */
 extern void VectorPushBack(Vector * vector, void* pData);
+/**
+ * @brief 矢量从末尾弹出一个元素
+ * @param vector 矢量指针
+ * @return 元素指针
+ */
 extern void* VectorPopBack(Vector * vector);
 /**
  * @brief 在矢量中指定索引的元素后插入元素
@@ -57,3 +63,9 @@ extern void VectorSort(
  * @param vector 矢量指针
  */
 extern void VectorDebugPrint(Vector * vector);
+/**
+ * @brief 交换两个矢量的数据
+ * @param vectorA 矢量A
+ * @param vectorB 矢量B
+ */
+extern void VectorSwap(Vector* vectorA, Vector* vectorB);
