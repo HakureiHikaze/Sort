@@ -16,12 +16,29 @@ void Swap(void** pArray, size_t a, size_t b){
     pArray[b] = pBuffer;
 }
 
+size_t FindBest(void** pArray,
+                size_t begin,
+                size_t end,
+                int order,
+                int (*compareCallback)(void*,void *)
+                ){
+    void* p = pArray[begin];
+    size_t rtn = begin;
+    for(size_t i = begin+1; i<=end; i++){
+        if(order * compareCallback(p, pArray[i]) == 1){
+            p = pArray[i];
+            rtn = i;
+        }
+    }
+    return rtn;
+}
+
 void BubbleSort(
         void** pArray,
         size_t begin,
         size_t end,
         int order,
-        int(*compareCallback)(void* pA, void* pB)
+        int(*compareCallback)(void*,void*)
         ){
     if(begin == end)return;
     while (true) {
@@ -35,5 +52,19 @@ void BubbleSort(
             }
         }
         if(!x) break;
+    }
+}
+
+void SelectSort(
+        void** pArray,
+        size_t begin,
+        size_t end,
+        int order,
+        int(*compareCallback)(void*,void*)
+        ){
+    if(begin == end)return;
+    for(size_t i = begin; i<end; i++){
+        size_t j = FindBest(pArray,i,end,order,compareCallback);
+        Swap(pArray,i,j);
     }
 }

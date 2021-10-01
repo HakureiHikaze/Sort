@@ -10,13 +10,13 @@ int main() {
     clock_t start, end;
     Vector * vector = VectorInit();
     Vector * test;
-    for(int i = 50000; i<=50000;i+=2000){
+    for(int i = 5000; i<=50000;i+=5000){
         test = VectorInit();
         for(size_t j = 1; j<=i;j++){
             VectorPushBack(test, (void*)j);
         }
         start = clock();
-        VectorSort(test,0,i-1,BIG_TO_SMALL,compareInt,BubbleSort);
+        VectorSort(test,0,i-1,BIG_TO_SMALL,compareInt,SelectSort);
         end = clock();
         //VectorDebugPrint(test, printInt);
         VectorFree(test);
