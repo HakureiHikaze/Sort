@@ -82,21 +82,21 @@ void InsertSort(
         int order,
         int(*compareCallback)(void* pA, void* pB)
         ){
-    for(size_t i = begin+1; i<=end; i++){
-        void* p = pArray[i];
-        for(size_t j = begin; j<i; j++){
+    for(size_t i = begin+1; i<=end; i++){//遍历无序区
+        void* p = pArray[i];//缓存无序区首值
+        for(size_t j = begin; j<i; j++){//遍历有序区
             if(order*compareCallback(p,pArray[j]) == 1){
-                if(j == i-1){
-                    pArray[i] = p;
+                if(j == i-1){//如果插入到有序区末尾，即无操作（有序区末尾和无序区起始重叠）
                     break;
                 }
-                continue;
+                continue;//continue直到不符合比较条件，即找到插入位置的次一索引
             }
-            for(size_t k = i; k>j;k--){
+            //找到插入位置的次一索引后
+            for(size_t k = i; k>j;k--){//移动有序区
                 pArray[k] = pArray[k-1];
             }
-            pArray[j] = p;
-            break;
+            pArray[j] = p;//插入缓存的值
+            break;//无序区的下一个值
         }
     }
 }
