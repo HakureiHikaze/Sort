@@ -36,3 +36,11 @@ extern void SelectSort(
         int order,
         int(*compareCallback)(void* pA, void* pB)
         );
+
+extern void InsertSort(
+        void** pArray,
+        size_t begin,
+        size_t end,
+        int order,
+        int(*compareCallback)(void* pA, void* pB)
+        );

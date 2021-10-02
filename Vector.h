@@ -37,16 +37,16 @@ extern void VectorPushBack(Vector * vector, void* pData);
  */
 extern void* VectorPopBack(Vector * vector);
 /**
- * @brief 在矢量中指定索引的元素后插入元素
+ * @brief 在矢量中指定索引的元素前插入元素
  * @param vector 矢量指针
- * @param index 索引，取值范围[-1,size-1]
+ * @param index 索引，取值范围[0,size]
  * @param pData 数据指针
  */
 extern void VectorInsertElement(Vector * vector, size_t index, void* pData);
 /**
- * @brief 在矢量中指定索引的元素后插入矢量
+ * @brief 在矢量中指定索引的元素前插入矢量
  * @param vector 矢量指针
- * @param index 索引
+ * @param index 索引，取值范围[0,size]
  * @param pVector 插入的矢量的指针
  */
 extern void VectorInsertVector(Vector * vector, size_t index, Vector* pVector);

@@ -22,6 +22,11 @@ size_t FindBest(void** pArray,
                 int order,
                 int (*compareCallback)(void*,void *)
                 ){
+    /*
+     * 寻找最值元素的索引
+     * order = SMALL_TO_BIG = 1时， 寻找最小值，
+     * order = BIG_TO_SMALL =-1时， 寻找最大值。
+     */
     void* p = pArray[begin];
     size_t rtn = begin;
     for(size_t i = begin+1; i<=end; i++){
@@ -64,7 +69,34 @@ void SelectSort(
         ){
     if(begin == end)return;
     for(size_t i = begin; i<end; i++){
+        //找到最值元素游标j，并将其元素与当前游标的元素交换
         size_t j = FindBest(pArray,i,end,order,compareCallback);
         Swap(pArray,i,j);
+    }
+}
+
+void InsertSort(
+        void** pArray,
+        size_t begin,
+        size_t end,
+        int order,
+        int(*compareCallback)(void* pA, void* pB)
+        ){
+    for(size_t i = begin+1; i<=end; i++){
+        void* p = pArray[i];
+        for(size_t j = begin; j<i; j++){
+            if(order*compareCallback(p,pArray[j]) == 1){
+                if(j == i-1){
+                    pArray[i] = p;
+                    break;
+                }
+                continue;
+            }
+            for(size_t k = i; k>j;k--){
+                pArray[k] = pArray[k-1];
+            }
+            pArray[j] = p;
+            break;
+        }
     }
 }
