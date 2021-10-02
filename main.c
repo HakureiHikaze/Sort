@@ -5,18 +5,28 @@
 
 extern void printInt(void* I);
 extern int compareInt(void* a, void* b);
-
+#define DEBUG
 int main() {
     clock_t start, end;
     Vector * vector = VectorInit();
+    Vector * vector1 = VectorInit();
+    for(size_t i =0; i<10; i++){
+        VectorPushBack(vector,(void*)i);
+    }
+    for(size_t i =100; i<=135; i++){
+        VectorPushBack(vector1,(void*)i);
+    }
+    VectorInsertVector(vector,2,vector1);
+    VectorDebugPrint(vector,printInt);
     Vector * test;
-    for(int i = 4000; i<=32000;i+=4000){
+
+    for(int i = 12800; i<12800;i+=400){
         test = VectorInit();
         for(size_t j = 1; j<=i;j++){
             VectorPushBack(test, (void*)rand());
         }
         start = clock();
-        VectorSort(test,0,i-1,BIG_TO_SMALL,compareInt,BubbleSort);
+        VectorSort(test,0,i-1,BIG_TO_SMALL,compareInt,InsertSort);
         end = clock();
         //VectorDebugPrint(test, printInt);
         VectorFree(test);

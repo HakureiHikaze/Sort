@@ -12,12 +12,23 @@ Vector* VectorInit(){
     ASSERT(pRtn);
     return pRtn;
 }
-
+#define DEBUG
 void VectorReAlloc(Vector* vector){
+#ifndef DEBUG
     void **pNew = (void **) realloc(vector->pArray, 2 * vector->capacity * sizeof(void *));
     ASSERT(pNew);//空检测
     vector->pArray = pNew;
     vector->capacity *= 2;
+#endif
+#ifdef DEBUG
+    void** pNew = (void**)calloc(2*vector->capacity+16,sizeof(void*));
+    ASSERT(pNew);
+    for(size_t i = 0; i<vector->size;i++){
+        pNew[i] = vector->pArray[i];
+    }
+    vector->pArray = pNew;
+    vector->capacity  = vector->capacity*2 + 16;
+#endif
 }
 
 void VectorElementCpy(Vector * vector, size_t from, size_t to){
