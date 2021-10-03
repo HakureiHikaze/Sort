@@ -8,27 +8,18 @@ extern int compareInt(void* a, void* b);
 #define DEBUG
 int main() {
     clock_t start, end;
-    Vector * vector = VectorInit();
-    Vector * vector1 = VectorInit();
-    for(size_t i =0; i<10; i++){
-        VectorPushBack(vector,(void*)i);
-    }
-    for(size_t i =100; i<=135; i++){
-        VectorPushBack(vector1,(void*)i);
-    }
-    VectorInsertVector(vector,2,vector1);
-    VectorDebugPrint(vector,printInt);
     Vector * test;
-
-    for(int i = 12800; i<12800;i+=400){
+    for(int i = 100000000; i<=100000000;i+=200000){
         test = VectorInit();
         for(size_t j = 1; j<=i;j++){
-            VectorPushBack(test, (void*)rand());
+            unsigned long i3 = rand();
+            unsigned long i4 = rand();
+                VectorPushBack(test, (void*)(i3<<16 + i4));
         }
         start = clock();
-        VectorSort(test,0,i-1,BIG_TO_SMALL,compareInt,InsertSort);
+        VectorSort(test,0,i-1,SMALL_TO_BIG,compareInt,QuickSort);
         end = clock();
-        //VectorDebugPrint(test, printInt);
+        VectorDebugPrint(test, printInt);
         VectorFree(test);
         printf_s("Sorted %d elements, spent %ld\n",i, end-start);
         fflush(stdout);
@@ -37,7 +28,7 @@ int main() {
 }
 
 void printInt(void* I){
-    printf_s("%ld\t",I);
+    printf_s("%u\t",I);
 }
 
 int compareInt(void* a, void* b){

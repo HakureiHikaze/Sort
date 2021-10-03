@@ -100,3 +100,38 @@ void InsertSort(
         }
     }
 }
+
+size_t Partition(
+        void** pArray,
+        size_t low,
+        size_t high,
+        int order,
+        int(*compareCallback)(void* pA, void* pB)
+        ){
+    void* pPivot =pArray[low];
+    while(low < high){
+        while(low< high && (order*compareCallback(pPivot, pArray[high]) == -1)){
+            high--;
+        }
+        Swap(pArray, low, high);
+        while(low< high && (order*compareCallback(pPivot, pArray[low]) == 1)){
+        low++;
+        }
+        Swap(pArray, low, high);
+    }
+    return low;
+}
+
+void QuickSort(
+        void** pArray,
+        size_t begin,
+        size_t end,
+        int order,
+        int(*compareCallback)(void* pA, void* pB)
+        ){
+    if(begin < end){
+        size_t pivotIndex = Partition(pArray,begin,end,order,compareCallback);
+        if(pivotIndex)QuickSort(pArray,begin,pivotIndex-1,order,compareCallback);
+        if(pivotIndex< end)QuickSort(pArray,pivotIndex+1, end,order,compareCallback);
+    }
+}
