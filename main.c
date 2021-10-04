@@ -22,7 +22,7 @@ int main() {
         end = clock();
         //VectorDebugPrint(test, printInt);
         VectorFree(test);
-        printf_s("Sorted %d elements, spent %ld\n",i, end-start);
+        printf_s("Sorted %d elements, spent %ld ms\n",i, end-start);
         fflush(stdout);
     }
     return 0;
