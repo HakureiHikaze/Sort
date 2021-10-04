@@ -4,6 +4,14 @@
 //
 
 #include "SortAlgorithm.h"
+#include <math.h>
+size_t MergeSort_(
+        void** pArray,
+        size_t begin,
+        size_t end,
+        int order,
+        int(*compareCallback)(void* pA, void* pB)
+        );
 /**
  * @brief 内部函数，交换数组两索引确定的元素
  * @param pArray 数组指针
@@ -108,6 +116,8 @@ size_t Partition(
         int order,
         int(*compareCallback)(void* pA, void* pB)
         ){
+    //printf("Calling Partition(...), Low:\t%lld,\tHigh:\t%lld.\n", low,high);
+    //fflush(stdout);
     void* pPivot =pArray[low];
     while(low < high){
         while(low< high && (order*compareCallback(pPivot, pArray[high]) == -1)){
@@ -134,4 +144,56 @@ void QuickSort(
         if(pivotIndex)QuickSort(pArray,begin,pivotIndex-1,order,compareCallback);
         if(pivotIndex< end)QuickSort(pArray,pivotIndex+1, end,order,compareCallback);
     }
+}
+
+void MergeSort(
+        void** pArray,
+        size_t begin,
+        size_t end,
+        int order,
+        int(*compareCallback)(void* pA, void* pB)
+        ){
+    MergeSort_(pArray,begin,end,order,compareCallback);
+}
+
+
+size_t MergeSort_(
+        void** pArray,
+        size_t begin,
+        size_t end,
+        int order,
+        int(*compareCallback)(void* pA, void* pB)
+        ){
+    //printf("MergeSort called:\npArray:\t%p\tbegin:\t%zu\tend:\t%zu\n",pArray,begin,end);
+    //fflush(stdout);
+    if(begin == end){
+        return 1;
+    }
+    size_t length = end-begin+1;
+    size_t preLength = MergeSort_(pArray,begin,begin+(end-begin)/2,order,compareCallback);
+    size_t postLength = MergeSort_(pArray,begin+(end-begin)/2+1, end,order,compareCallback);
+    void** pBuffer = (void**) calloc(length, sizeof(void*));
+    size_t i=0, j=0;
+    while(i<preLength &&j<postLength){
+        if(order * compareCallback(pArray[begin+i], pArray[begin+preLength+j]) == -1){
+            pBuffer[i+j] = pArray[begin+i];
+            i++;
+            continue;
+        }
+        pBuffer[i+j] = pArray[begin+preLength+j];
+        j++;
+    }
+    while(i < preLength){
+        pBuffer[i+j] = pArray[begin+i];
+        i++;
+    }
+    while(j < postLength){
+        pBuffer[i+j+1] = pArray[begin+preLength+j];
+        j++;
+    }
+    for(size_t k = 0; k<length;k++){
+        pArray[begin+k] = pBuffer[k];
+    }
+    free(pBuffer);
+    return length;
 }

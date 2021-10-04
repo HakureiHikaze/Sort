@@ -9,15 +9,17 @@ extern int compareInt(void* a, void* b);
 int main() {
     clock_t start, end;
     Vector * test;
-    for(int i = 100000000; i<=100000000;i+=200000){
+    for(int i = 900; i<=900;i+=100){
         test = VectorInit();
         for(size_t j = 1; j<=i;j++){
-            unsigned long i3 = rand();
-            unsigned long i4 = rand();
-                VectorPushBack(test, (void*)(i3<<16 + i4));
+//            unsigned long i3 = rand();
+//            unsigned long i4 = rand();
+//            if(j%4567345 == 0)VectorPushBack(test,(void*)j);
+//            else VectorPushBack(test, (void*)(i3<<16 + i4));
+            VectorPushBack(test,(void*)j);
         }
         start = clock();
-        VectorSort(test,0,i-1,SMALL_TO_BIG,compareInt,QuickSort);
+        VectorSort(test,0,i-1,SMALL_TO_BIG,compareInt,MergeSort);
         end = clock();
         VectorDebugPrint(test, printInt);
         VectorFree(test);

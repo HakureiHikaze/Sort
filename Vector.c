@@ -21,13 +21,13 @@ void VectorReAlloc(Vector* vector){
     vector->capacity *= 2;
 #endif
 #ifdef DEBUG
-    void** pNew = (void**)calloc(2*vector->capacity+16,sizeof(void*));
+    void** pNew = (void**)calloc(2*vector->capacity,sizeof(void*));
     ASSERT(pNew);
     for(size_t i = 0; i<vector->size;i++){
         pNew[i] = vector->pArray[i];
     }
     vector->pArray = pNew;
-    vector->capacity  = vector->capacity*2 + 16;
+    vector->capacity  = vector->capacity*2;
 #endif
 }
 

@@ -4,6 +4,7 @@
 //
 
 #pragma once
+#include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 /**
@@ -53,6 +54,14 @@ extern void InsertSort(
         );
 
 extern void QuickSort(
+        void** pArray,
+        size_t begin,
+        size_t end,
+        int order,
+        int(*compareCallback)(void* pA, void* pB)
+        );
+
+extern void MergeSort(
         void** pArray,
         size_t begin,
         size_t end,
