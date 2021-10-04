@@ -9,19 +9,18 @@ extern int compareInt(void* a, void* b);
 int main() {
     clock_t start, end;
     Vector * test;
-    for(int i = 900; i<=900;i+=100){
+    for(int i = 100000000; i<=100000000;i+=10000000){
         test = VectorInit();
         for(size_t j = 1; j<=i;j++){
-//            unsigned long i3 = rand();
-//            unsigned long i4 = rand();
-//            if(j%4567345 == 0)VectorPushBack(test,(void*)j);
-//            else VectorPushBack(test, (void*)(i3<<16 + i4));
-            VectorPushBack(test,(void*)j);
+            unsigned long i3 = rand();
+            unsigned long i4 = rand();
+            if(j%4567345 == 0)VectorPushBack(test,(void*)j);
+            else VectorPushBack(test, (void*)(i3<<16 + i4));
         }
         start = clock();
-        VectorSort(test,0,i-1,SMALL_TO_BIG,compareInt,MergeSort);
+        VectorSort(test,0,i-1,BIG_TO_SMALL,compareInt,MergeSort);
         end = clock();
-        VectorDebugPrint(test, printInt);
+        //VectorDebugPrint(test, printInt);
         VectorFree(test);
         printf_s("Sorted %d elements, spent %ld\n",i, end-start);
         fflush(stdout);

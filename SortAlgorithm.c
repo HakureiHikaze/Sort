@@ -188,7 +188,7 @@ size_t MergeSort_(
         i++;
     }
     while(j < postLength){
-        pBuffer[i+j+1] = pArray[begin+preLength+j];
+        pBuffer[i+j] = pArray[begin+preLength+j];
         j++;
     }
     for(size_t k = 0; k<length;k++){
