@@ -7,4 +7,17 @@
 #include "Vector.h"
 
 typedef Vector Heap;
-extern Heap* HeapInit(Vector*);
+extern void printInt(void* I);
+extern Heap* HeapInit(
+        Vector* vector,
+        int order,
+        int(*compareCallback)(void* pA, void* pB)
+        );
+
+
+extern void HeapAdjust(
+        Heap* heap,
+        int order,
+        int(*compareCallback)(void* pA, void* pB)
+        );
+extern void HeapSwapElement(Heap*, size_t, size_t);

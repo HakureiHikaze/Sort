@@ -59,6 +59,13 @@ void VectorPushBack(Vector *vector, void *pData) {
     vector->size++;
 }
 
+void* VectorPopBack(Vector *vector) {
+    ASSERT(vector);//空检测
+    void* p =vector->pArray[vector->size-1];
+    vector->size--;
+    return p;
+}
+
 void VectorInsertElement(Vector * vector, size_t index, void* pData){
     ASSERT(vector);//空检测
     ASSERT(!(index>vector->size-1));
@@ -114,12 +121,13 @@ void VectorSort(
 
 void VectorDebugPrint(Vector * vector, void(*printCallback)(void*)){
     ASSERT(vector);//空检测
-    printf("Vector:  \t0x%zx\n", (size_t)vector);
-    printf("Array:   \t0x%zx\n", (size_t)vector->pArray);
-    printf("Size:    \t%zu\n", vector->size);
-    printf("Capacity:\t%zu\n\n", vector->capacity);
+    printf_s("Vector:  \t0x%zx\n", (size_t)vector);
+    printf_s("Array:   \t0x%zx\n", (size_t)vector->pArray);
+    printf_s("Size:    \t%zu\n", vector->size);
+    printf_s("Capacity:\t%zu\n\n", vector->capacity);
     for(size_t i = 0; i<vector->size; i++){
         if(!(i%8)) printf_s("\n");
         printCallback(vector->pArray[i]);
     }
+    printf_s("\n");
 }

@@ -4,6 +4,8 @@
 //
 
 #include "SortAlgorithm.h"
+#include "Vector.h"
+#include "Heap.h"
 #include <math.h>
 size_t MergeSort_(
         void** pArray,
@@ -206,5 +208,21 @@ void HeapSort(
         int order,
         int(*compareCallback)(void* pA, void* pB)
         ){
-
+    size_t length = end-begin+1;
+    Vector* data = VectorInit();
+    for(size_t i = begin; i<=end;i++){
+        VectorPushBack(data,pArray[i]);
+    }
+    VectorFree(data);
+    Heap* heap = HeapInit(data,order,compareCallback);
+    size_t j = 0;
+    while(heap->size>2){
+        HeapSwapElement(heap,0, heap->size-1);
+        pArray[begin+j] = VectorPopBack(heap);
+        HeapAdjust(heap,order,compareCallback);
+        j++;
+    }
+    pArray[begin+length-2] = VectorPopBack(heap);
+    pArray[begin+length-1] = VectorPopBack(heap);
+    VectorFree(heap);
 }
