@@ -213,8 +213,8 @@ void HeapSort(
     for(size_t i = begin; i<=end;i++){
         VectorPushBack(data,pArray[i]);
     }
-    VectorFree(data);
     Heap* heap = HeapInit(data,order,compareCallback);
+    VectorFree(data);
     size_t j = 0;
     while(heap->size>2){
         HeapSwapElement(heap,0, heap->size-1);

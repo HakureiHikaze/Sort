@@ -16,7 +16,9 @@ int main() {
 //    }
 //    Heap* testHeap = HeapInit(test,BIG_TO_SMALL,compareInt);
 //    VectorDebugPrint(testHeap,printInt);
-    for(int i = 100; i<=100;i+=10000000){
+    time_t t;
+    srand((unsigned)time(&t));
+    for(int i = 1000; i<=9000;i+=1000){
         test = VectorInit();
         for(size_t j = 1; j<=i;j++){
             unsigned long i3 = rand();
@@ -29,7 +31,7 @@ int main() {
         end = clock();
         //VectorDebugPrint(test, printInt);
         VectorFree(test);
-        printf_s("Sorted %d elements, spent %ld ms\n",i, end-start);
+        printf_s("Sorted %d elements, spent %ld  \tms\n",i, end-start);
         fflush(stdout);
     }
     return 0;
