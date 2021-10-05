@@ -156,7 +156,6 @@ void MergeSort(
     MergeSort_(pArray,begin,end,order,compareCallback);
 }
 
-
 size_t MergeSort_(
         void** pArray,
         size_t begin,
@@ -164,8 +163,10 @@ size_t MergeSort_(
         int order,
         int(*compareCallback)(void* pA, void* pB)
         ){
-    //printf("MergeSort called:\npArray:\t%p\tbegin:\t%zu\tend:\t%zu\n",pArray,begin,end);
-    //fflush(stdout);
+#ifdef DEBUG_HIKAZE
+    printf("MergeSort called:\npArray:\t%p\tbegin:\t%zu\tend:\t%zu\n",pArray,begin,end);
+    fflush(stdout);
+#endif
     if(begin == end){
         return 1;
     }
@@ -196,4 +197,14 @@ size_t MergeSort_(
     }
     free(pBuffer);
     return length;
+}
+
+void HeapSort(
+        void** pArray,
+        size_t begin,
+        size_t end,
+        int order,
+        int(*compareCallback)(void* pA, void* pB)
+        ){
+
 }
