@@ -19,6 +19,12 @@ size_t MergeSort_(
 
 void heapify(void** pArray, size_t base, size_t n, size_t i, int order,
             int(*compareCallback)(void* pA, void* pB));
+
+size_t binarySearchInsertPos(void** pArray, size_t left, size_t right, void* key, 
+                            int order, int(*compareCallback)(void* pA, void* pB));
+
+size_t medianOfThree(void** pArray, size_t low, size_t high, 
+                    int order, int(*compareCallback)(void* pA, void* pB));
 /**
  * @brief 内部函数，交换数组两索引确定的元素
  * @param pArray 数组指针
@@ -90,6 +96,20 @@ void SelectSort(
     }
 }
 
+// Binary search to find insertion position
+size_t binarySearchInsertPos(void** pArray, size_t left, size_t right, void* key, 
+                            int order, int(*compareCallback)(void* pA, void* pB)) {
+    while (left < right) {
+        size_t mid = left + (right - left) / 2;
+        if (order * compareCallback(pArray[mid], key) == 1) {
+            right = mid;
+        } else {
+            left = mid + 1;
+        }
+    }
+    return left;
+}
+
 void InsertSort(
         void** pArray,
         size_t begin,
@@ -99,15 +119,37 @@ void InsertSort(
         ){
     for(size_t i = begin+1; i<=end; i++){//遍历无序区
         void* key = pArray[i];//缓存无序区当前值
-        size_t j = i;
         
-        // Move elements that are greater/smaller than key one position ahead
-        while(j > begin && order * compareCallback(pArray[j-1], key) == 1){
+        // Use binary search to find insertion position (optimization)
+        size_t pos = binarySearchInsertPos(pArray, begin, i, key, order, compareCallback);
+        
+        // Move elements to make space for key
+        for(size_t j = i; j > pos; j--) {
             pArray[j] = pArray[j-1];
-            j--;
         }
-        pArray[j] = key;//插入缓存的值到正确位置
+        pArray[pos] = key;//插入缓存的值到正确位置
     }
+}
+
+// Median-of-three pivot selection for better performance
+size_t medianOfThree(void** pArray, size_t low, size_t high, 
+                    int order, int(*compareCallback)(void* pA, void* pB)) {
+    size_t mid = low + (high - low) / 2;
+    
+    // Sort low, mid, high
+    if (order * compareCallback(pArray[low], pArray[mid]) == 1) {
+        Swap(pArray, low, mid);
+    }
+    if (order * compareCallback(pArray[mid], pArray[high]) == 1) {
+        Swap(pArray, mid, high);
+    }
+    if (order * compareCallback(pArray[low], pArray[mid]) == 1) {
+        Swap(pArray, low, mid);
+    }
+    
+    // Place median at low position for partitioning
+    Swap(pArray, low, mid);
+    return low;
 }
 
 size_t Partition(
@@ -117,6 +159,11 @@ size_t Partition(
         int order,
         int(*compareCallback)(void* pA, void* pB)
         ){
+    // Use median-of-three for better pivot selection (optimization)
+    if (high - low > 2) {
+        medianOfThree(pArray, low, high, order, compareCallback);
+    }
+    
     //printf("Calling Partition(...), Low:\t%lld,\tHigh:\t%lld.\n", low,high);
     //fflush(stdout);
     void* pPivot =pArray[low];
