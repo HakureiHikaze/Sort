@@ -1,0 +1,3 @@
+/home/runner/work/Sort/Sort/build/CMakeFiles/Sort.dir
+/home/runner/work/Sort/Sort/build/CMakeFiles/edit_cache.dir
+/home/runner/work/Sort/Sort/build/CMakeFiles/rebuild_cache.dir

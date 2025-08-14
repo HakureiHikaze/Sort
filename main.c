@@ -31,14 +31,14 @@ int main() {
         end = clock();
         //VectorDebugPrint(test, printInt);
         VectorFree(test);
-        printf_s("Sorted %d elements, spent %ld  \tms\n",i, end-start);
+        printf("Sorted %d elements, spent %ld  \tms\n",i, end-start);
         fflush(stdout);
     }
     return 0;
 }
 
 void printInt(void* I){
-    printf_s("%u\t",I);
+    printf("%zu\t",(size_t)I);
 }
 
 int compareInt(void* a, void* b){

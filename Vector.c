@@ -26,6 +26,7 @@ void VectorReAlloc(Vector* vector){
     for(size_t i = 0; i<vector->size;i++){
         pNew[i] = vector->pArray[i];
     }
+    if(vector->pArray) free(vector->pArray); // Fix memory leak
     vector->pArray = pNew;
     vector->capacity  = vector->capacity*2;
 #endif
@@ -121,13 +122,13 @@ void VectorSort(
 
 void VectorDebugPrint(Vector * vector, void(*printCallback)(void*)){
     ASSERT(vector);//空检测
-    printf_s("Vector:  \t0x%zx\n", (size_t)vector);
-    printf_s("Array:   \t0x%zx\n", (size_t)vector->pArray);
-    printf_s("Size:    \t%zu\n", vector->size);
-    printf_s("Capacity:\t%zu\n\n", vector->capacity);
+    printf("Vector:  \t0x%zx\n", (size_t)vector);
+    printf("Array:   \t0x%zx\n", (size_t)vector->pArray);
+    printf("Size:    \t%zu\n", vector->size);
+    printf("Capacity:\t%zu\n\n", vector->capacity);
     for(size_t i = 0; i<vector->size; i++){
-        if(!(i%8)) printf_s("\n");
+        if(!(i%8)) printf("\n");
         printCallback(vector->pArray[i]);
     }
-    printf_s("\n");
+    printf("\n");
 }
