@@ -1,0 +1,1 @@
+/usr/bin/cc -Wl,-stack,1073741824 -Wl,--dependency-file=CMakeFiles/Sort.dir/link.d CMakeFiles/Sort.dir/main.c.o CMakeFiles/Sort.dir/Vector.c.o CMakeFiles/Sort.dir/SortAlgorithm.c.o CMakeFiles/Sort.dir/Heap.c.o -o Sort
