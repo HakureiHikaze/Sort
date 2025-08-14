@@ -7,6 +7,8 @@
 #include "Vector.h"
 #include "Heap.h"
 #include <math.h>
+
+// Forward declarations for internal functions
 size_t MergeSort_(
         void** pArray,
         size_t begin,
@@ -14,6 +16,9 @@ size_t MergeSort_(
         int order,
         int(*compareCallback)(void* pA, void* pB)
         );
+
+void heapify(void** pArray, size_t base, size_t n, size_t i, int order,
+            int(*compareCallback)(void* pA, void* pB));
 /**
  * @brief 内部函数，交换数组两索引确定的元素
  * @param pArray 数组指针
@@ -93,21 +98,15 @@ void InsertSort(
         int(*compareCallback)(void* pA, void* pB)
         ){
     for(size_t i = begin+1; i<=end; i++){//遍历无序区
-        void* p = pArray[i];//缓存无序区首值
-        for(size_t j = begin; j<i; j++){//遍历有序区
-            if(order*compareCallback(p,pArray[j]) == 1){
-                if(j == i-1){//如果插入到有序区末尾，即无操作（有序区末尾和无序区起始重叠）
-                    break;
-                }
-                continue;//continue直到不符合比较条件，即找到插入位置的次一索引
-            }
-            //找到插入位置的次一索引后
-            for(size_t k = i; k>j;k--){//移动有序区
-                pArray[k] = pArray[k-1];
-            }
-            pArray[j] = p;//插入缓存的值
-            break;//无序区的下一个值
+        void* key = pArray[i];//缓存无序区当前值
+        size_t j = i;
+        
+        // Move elements that are greater/smaller than key one position ahead
+        while(j > begin && order * compareCallback(pArray[j-1], key) == 1){
+            pArray[j] = pArray[j-1];
+            j--;
         }
+        pArray[j] = key;//插入缓存的值到正确位置
     }
 }
 
@@ -143,8 +142,8 @@ void QuickSort(
         ){
     if(begin < end){
         size_t pivotIndex = Partition(pArray,begin,end,order,compareCallback);
-        if(pivotIndex)QuickSort(pArray,begin,pivotIndex-1,order,compareCallback);
-        if(pivotIndex< end)QuickSort(pArray,pivotIndex+1, end,order,compareCallback);
+        if(pivotIndex > begin) QuickSort(pArray,begin,pivotIndex-1,order,compareCallback);
+        if(pivotIndex < end) QuickSort(pArray,pivotIndex+1, end,order,compareCallback);
     }
 }
 
@@ -208,21 +207,46 @@ void HeapSort(
         int order,
         int(*compareCallback)(void* pA, void* pB)
         ){
-    size_t length = end-begin+1;
-    Vector* data = VectorInit();
-    for(size_t i = begin; i<=end;i++){
-        VectorPushBack(data,pArray[i]);
+    size_t length = end - begin + 1;
+    if(length <= 1) return;
+    
+    // Build heap (rearrange array) - use opposite order for heapify to get correct sort order
+    for(size_t i = length / 2; i > 0; i--) {
+        heapify(pArray, begin, length, begin + i - 1, -order, compareCallback);
     }
-    Heap* heap = HeapInit(data,order,compareCallback);
-    VectorFree(data);
-    size_t j = 0;
-    while(heap->size>2){
-        HeapSwapElement(heap,0, heap->size-1);
-        pArray[begin+j] = VectorPopBack(heap);
-        HeapAdjust(heap,order,compareCallback);
-        j++;
+    
+    // One by one extract an element from heap
+    for(size_t i = length; i > 1; i--) {
+        // Move current root to end
+        Swap(pArray, begin, begin + i - 1);
+        
+        // Call heapify on the reduced heap
+        heapify(pArray, begin, i - 1, begin, -order, compareCallback);
     }
-    pArray[begin+length-2] = VectorPopBack(heap);
-    pArray[begin+length-1] = VectorPopBack(heap);
-    VectorFree(heap);
+}
+
+// Helper function to heapify a subtree rooted with node i
+void heapify(void** pArray, size_t base, size_t n, size_t i, int order,
+            int(*compareCallback)(void* pA, void* pB)) {
+    size_t target = i; // Initialize largest/smallest as root
+    size_t left = base + 2 * (i - base) + 1; // left = 2*i + 1
+    size_t right = base + 2 * (i - base) + 2; // right = 2*i + 2
+    
+    // If left child is larger/smaller than root
+    if (left < base + n && order * compareCallback(pArray[target], pArray[left]) == 1) {
+        target = left;
+    }
+    
+    // If right child is larger/smaller than target so far
+    if (right < base + n && order * compareCallback(pArray[target], pArray[right]) == 1) {
+        target = right;
+    }
+    
+    // If target is not root
+    if (target != i) {
+        Swap(pArray, i, target);
+        
+        // Recursively heapify the affected sub-tree
+        heapify(pArray, base, n, target, order, compareCallback);
+    }
 }

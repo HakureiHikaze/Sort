@@ -45,17 +45,23 @@ void Adjust_(
         int order,
         int(*compareCallback)(void* pA, void* pB)
         ){
-    if(root*2+1<heap->size) {
-        if (order * compareCallback(heap->pArray[root], heap->pArray[root * 2 + 1]) == 1) {
-            HeapSwapElement(heap,root, root*2+1);
-        }
-        Adjust_(heap, root * 2 + 1, order, compareCallback);
+    size_t largest = root;
+    size_t left = root * 2 + 1;
+    size_t right = root * 2 + 2;
+    
+    // Find the largest/smallest among root and its children
+    if (left < heap->size && order * compareCallback(heap->pArray[largest], heap->pArray[left]) == 1) {
+        largest = left;
     }
-    if(root*2+2<heap->size) {
-        if (order * compareCallback(heap->pArray[root], heap->pArray[root * 2 + 2]) == 1) {
-            HeapSwapElement(heap,root, root*2+2);
-        }
-        Adjust_(heap, root * 2 + 2, order, compareCallback);
+    
+    if (right < heap->size && order * compareCallback(heap->pArray[largest], heap->pArray[right]) == 1) {
+        largest = right;
+    }
+    
+    // If root is not the largest/smallest, swap and continue heapifying
+    if (largest != root) {
+        HeapSwapElement(heap, root, largest);
+        Adjust_(heap, largest, order, compareCallback);
     }
 }
 
